@@ -301,10 +301,10 @@ code {
   color: var(--lcars-sidebar);
 }
 
-/* Online status at the end of the status line: a green dot that pulses
-   calmly, in the green of the status segment of the theme's top bar
-   (--lcars-message-status-button); still where the system asks for reduced
-   motion. */
+/* Online status at the end of the status line: a green dot in the green of
+   the status segment of the theme's top bar (--lcars-message-status-button)
+   that blinks like a status light: 1.5 s on, 1.5 s off, the dark light still
+   to be seen; steady where the system asks for reduced motion. */
 .lcars-status__online {
   display: flex;
   align-items: center;
@@ -318,17 +318,17 @@ code {
   border-radius: 50%;
   background: var(--lcars-online);
   box-shadow: 0 0 0.375rem var(--lcars-online);
-  animation: lcars-online 2.4s ease-in-out infinite;
+  animation: lcars-online 3s step-end infinite;
 }
 
 @keyframes lcars-online {
-  0%,
-  100% {
+  0% {
     opacity: 1;
   }
 
   50% {
-    opacity: 0.35;
+    opacity: 0.2;
+    box-shadow: none;
   }
 }
 
