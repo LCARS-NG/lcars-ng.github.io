@@ -1,0 +1,735 @@
+/**
+ * LCARS-NG landing page.
+ *
+ * Colors, sizes and the rules of the frame, the menu buttons, the panels and
+ * the capitals cut into bars come from the Drupal theme LCARS-NG
+ * (css/lcars/tokens.css, frame.css, navigation.css, base.css and
+ * components/panel/panel.css), reduced to what this page needs. No build
+ * step, no script, nothing loaded from other sites.
+ */
+
+/* Fonts, both under the SIL Open Font License 1.1 (OFL.txt next to each). */
+
+@font-face {
+  font-family: Antonio;
+  src: url("../fonts/antonio/Antonio-VariableFont_wght.woff2") format("woff2");
+  font-weight: 100 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "LCARS-NG Inter";
+  src: url("../fonts/inter/InterVariable-latin.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "LCARS-NG Inter";
+  src: url("../fonts/inter/InterVariable-Italic-latin.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Tokens */
+
+:root {
+  color-scheme: dark;
+
+  --lcars-space: #001b33;
+  --lcars-frame: #a7d4ff;
+  --lcars-sidebar: #3469aa;
+  --lcars-blue: #579df9;
+  --lcars-button: #5280b7;
+  --lcars-button-hover: var(--lcars-frame);
+  --lcars-button-active: #fff;
+  --lcars-accent: #a6843f;
+  --lcars-text: #fefefe;
+  --lcars-heading: var(--lcars-frame);
+  --lcars-link: #4bb0ff;
+  --lcars-link-hover: var(--lcars-frame);
+  --lcars-on-color: #000;
+  --lcars-box-border-color: color-mix(in srgb, var(--lcars-blue) 40%, var(--lcars-space));
+  --lcars-card-bg: color-mix(in srgb, var(--lcars-blue) 8%, var(--lcars-space));
+
+  --lcars-font: "LCARS-NG Inter", system-ui, sans-serif;
+  --lcars-font-label: "Antonio", var(--lcars-font);
+  --lcars-font-code: ui-monospace, "DejaVu Sans Mono", monospace;
+
+  --lcars-sidebar-width: 9.375rem;
+  --lcars-gutter: 1.25rem;
+  --lcars-seam: 4px;
+  --lcars-elbow-outer: 2.4375rem;
+  --lcars-elbow-inner: 1.25rem;
+  --lcars-bar-top: 2rem;
+  --lcars-bar-bottom: 1.5625rem;
+  --lcars-panel-bar: 0.9375rem;
+  --lcars-curve: 2.5rem;
+  --lcars-title-height: 1.5625rem;
+  --lcars-cap-inset: 1px;
+  --lcars-pill: 9999px;
+  --lcars-box-radius: 0.625rem;
+  --lcars-elbow-corner-ratio: 1.16;
+  --lcars-elbow-inner-ratio: 0.8;
+  --lcars-logo-size: 7rem;
+  --lcars-brand-gap: 1.25rem;
+}
+
+@media (max-width: 39.9375rem) {
+  :root {
+    --lcars-gutter: 0.75rem;
+    --lcars-elbow-outer: 1.75rem;
+    --lcars-elbow-inner: 0.875rem;
+    --lcars-bar-top: 1.5rem;
+    --lcars-title-height: 1.125rem;
+    --lcars-box-radius: 0.375rem;
+    --lcars-logo-size: 4.5rem;
+    --lcars-brand-gap: 0.875rem;
+  }
+}
+
+/* More contrast where the system asks for it, as the setting "As the
+   system" of the theme does. */
+@media (prefers-contrast: more) {
+  :root {
+    --lcars-sidebar: var(--lcars-frame);
+    --lcars-button: #d3e9ff;
+    --lcars-button-active: var(--lcars-blue);
+    --lcars-box-border-color: var(--lcars-blue);
+    --lcars-accent: #ffd068;
+  }
+}
+
+/* Base */
+
+html {
+  background: var(--lcars-space);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--lcars-text);
+  background: var(--lcars-space);
+  font-family: var(--lcars-font);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+a {
+  color: var(--lcars-link);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--lcars-link-hover);
+  text-decoration: underline;
+}
+
+:focus-visible {
+  outline: 2px solid var(--lcars-accent);
+  outline-offset: 2px;
+}
+
+p {
+  margin-block: 0 1rem;
+}
+
+code {
+  font-family: var(--lcars-font-code);
+  font-size: 0.9375em;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  inline-size: 1px;
+  block-size: 1px;
+  word-wrap: normal;
+}
+
+.skip-link:focus {
+  position: absolute;
+  z-index: 10;
+  inset: 0.5rem auto auto 0.5rem;
+  clip: auto;
+  inline-size: auto;
+  block-size: auto;
+  padding: 0.5rem 1rem;
+  color: var(--lcars-on-color);
+  background: var(--lcars-button-active);
+}
+
+/* Capitals cut into a bar: the text cuts the bar over its full height with
+   the dark of the page, its capitals fill it up to --lcars-cap-inset at the
+   top and bottom. Each place sets the height of its bar as
+   --lcars-cut-height. */
+
+.lcars-title h2,
+.lcars-panel__label {
+  padding-block: var(--lcars-cap-inset);
+  letter-spacing: normal;
+  background: var(--lcars-space);
+  font-size: calc(var(--lcars-cut-height) - 2 * var(--lcars-cap-inset));
+  font-size-adjust: cap-height 1;
+  line-height: var(--lcars-cut-height);
+  text-box: trim-both cap alphabetic;
+}
+
+/* The frame: an upper panel with logo and name, below it the frame with the
+   menu buttons on the left, the content and the footer. */
+
+.lcars-frame {
+  display: grid;
+  grid-template-areas:
+    "panel panel"
+    "head head"
+    "side main"
+    "foot foot";
+  grid-template-rows: auto auto 1fr auto;
+  grid-template-columns: var(--lcars-sidebar-width) minmax(0, 1fr);
+  box-sizing: border-box;
+  min-block-size: 100dvh;
+  padding: 1rem;
+  row-gap: var(--lcars-seam);
+}
+
+/* Upper panel: a bar at the top and the bottom, joined by the column on the
+   left with two elbows. */
+
+.lcars-upper {
+  display: grid;
+  grid-area: panel;
+  grid-template-rows: var(--lcars-panel-bar) auto var(--lcars-panel-bar);
+  grid-template-columns: var(--lcars-sidebar-width) minmax(0, 1fr);
+  margin-block-end: var(--lcars-seam); /* the two elbows face each other with a wider gap */
+  background: var(--lcars-sidebar);
+  border-start-start-radius: var(--lcars-elbow-outer);
+  border-end-start-radius: var(--lcars-elbow-outer);
+}
+
+.lcars-upper__inner {
+  grid-area: 2 / 2;
+  min-inline-size: 0;
+  padding-block: 1.5rem 1.25rem;
+  padding-inline: var(--lcars-gutter) 1rem;
+  border-start-start-radius: var(--lcars-elbow-inner);
+  border-end-start-radius: var(--lcars-elbow-inner);
+  background: var(--lcars-space);
+}
+
+/* Logo, name and slogan. The logo is the one-colored form of the theme logo
+   on a disc in the steel blue of the frame; its triangle sits at the center
+   of the disc (77 x 72: apex 38.5|1.81, base 1.67|70.12 and 75.33|70.12;
+   radius of the circle round it 44.08). */
+
+.lcars-brand {
+  display: grid;
+  grid-template-areas:
+    "logo name"
+    "logo slogan";
+  grid-template-columns: auto minmax(0, 1fr);
+  align-content: center;
+  align-items: end;
+  column-gap: var(--lcars-brand-gap);
+}
+
+.lcars-brand__logo {
+  --lcars-logo-gap: 0.3125rem;
+  --lcars-logo-unit: calc((var(--lcars-logo-size) / 2 - var(--lcars-logo-gap)) / 44.08);
+
+  display: grid;
+  grid-area: logo;
+  place-items: center;
+  inline-size: var(--lcars-logo-size);
+  block-size: var(--lcars-logo-size);
+  border-radius: 50%;
+  background: var(--lcars-sidebar);
+}
+
+.lcars-brand__logo img {
+  display: block;
+  translate: 0 calc(9.89 * var(--lcars-logo-unit));
+  inline-size: auto;
+  block-size: calc(72 * var(--lcars-logo-unit));
+}
+
+.lcars-brand__name {
+  grid-area: name;
+  margin: 0;
+  text-transform: uppercase;
+  color: var(--lcars-sidebar);
+  font-family: var(--lcars-font-label);
+  font-size: clamp(2.5rem, 1.5rem + 3vw, 4.5rem);
+  font-weight: bold;
+  line-height: 1;
+}
+
+.lcars-brand__slogan {
+  grid-area: slogan;
+  align-self: start;
+  margin: 0;
+  padding-block-start: 0.375rem;
+  text-transform: uppercase;
+  color: var(--lcars-sidebar);
+  font-size: 0.8125rem;
+}
+
+/* Status line under the name, where name and slogan start. */
+
+.lcars-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  margin-block: 1.25rem 0;
+  margin-inline-start: calc(var(--lcars-logo-size) + var(--lcars-brand-gap));
+  padding: 0;
+  list-style: none;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  font-weight: bold;
+}
+
+.lcars-status li:first-child {
+  color: var(--lcars-sidebar);
+}
+
+/* Top-left elbow of the lower frame */
+
+.lcars-head {
+  display: grid;
+  grid-area: head;
+  grid-template-rows: var(--lcars-bar-top) var(--lcars-curve);
+  grid-template-columns: var(--lcars-sidebar-width) minmax(0, 1fr);
+  background: var(--lcars-sidebar);
+  border-start-start-radius: var(--lcars-elbow-outer);
+}
+
+.lcars-head__inner {
+  grid-area: 2 / 2;
+  border-start-start-radius: var(--lcars-elbow-inner);
+  background: var(--lcars-space);
+}
+
+/* Sidebar: the column of menu buttons, labels at the bottom right. */
+
+.lcars-sidebar {
+  grid-area: side;
+  padding-block-end: 2.1875rem;
+  background: var(--lcars-sidebar);
+  line-height: 1;
+}
+
+.lcars-menu {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lcars-menu a,
+.lcars-sidebar h2 {
+  display: block;
+  margin: 0;
+  padding-block: 0.75rem 0.375rem;
+  padding-inline: 0 0.375rem;
+  text-align: end;
+  letter-spacing: normal;
+  text-transform: uppercase;
+  color: var(--lcars-on-color);
+  border-block-end: var(--lcars-seam) solid var(--lcars-space);
+  background: var(--lcars-button);
+  font-family: var(--lcars-font-label);
+  font-size: 1rem;
+  font-weight: bold;
+  line-height: 1;
+  overflow-wrap: anywhere;
+}
+
+.lcars-sidebar h2 {
+  background: var(--lcars-frame);
+}
+
+.lcars-menu a:hover,
+.lcars-menu a:focus-visible {
+  text-decoration: none;
+  color: var(--lcars-on-color);
+  background: var(--lcars-button-hover);
+}
+
+.lcars-menu a:focus-visible {
+  outline-offset: -2px;
+}
+
+/* Content: no space at the top, so the first title bar lines up with the
+   first menu button; the closing bar stands at its foot. */
+
+.lcars-main {
+  display: flex;
+  flex-direction: column;
+  grid-area: main;
+  min-inline-size: 0;
+  padding-block: 0 2rem;
+  padding-inline: var(--lcars-gutter) 0;
+}
+
+.lcars-main::after {
+  display: block;
+  block-size: var(--lcars-title-height);
+  margin-block-start: auto;
+  content: "";
+  border-radius: var(--lcars-pill);
+  background: var(--lcars-sidebar);
+}
+
+.lcars-section {
+  margin-block-end: 3rem;
+  scroll-margin-block-start: 1rem;
+}
+
+.lcars-section > p,
+.lcars-text {
+  max-inline-size: 44rem;
+}
+
+/* Title bar: a pill in the color of the frame with the title cut in. */
+
+.lcars-title {
+  display: flex;
+  align-items: center;
+  margin-block-end: 1.5rem;
+  padding-inline: 1.5em;
+  border-radius: var(--lcars-pill);
+  background: var(--lcars-sidebar);
+}
+
+.lcars-title h2 {
+  --lcars-cut-height: var(--lcars-title-height);
+
+  overflow: clip visible;
+  min-inline-size: 0;
+  margin: 0;
+  padding-inline: 0.3em;
+  white-space: nowrap;
+  text-transform: uppercase;
+  text-overflow: ellipsis;
+  color: var(--lcars-sidebar);
+  font-family: var(--lcars-font-label);
+  font-weight: bold;
+}
+
+/* Buttons: pills in the blue of the buttons with black labels. */
+
+.lcars-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-block: 1.5rem;
+}
+
+.lcars-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-inline-size: 8rem;
+  block-size: 2.75rem;
+  padding-inline: 1.5rem;
+  text-transform: uppercase;
+  color: var(--lcars-on-color);
+  border-radius: var(--lcars-pill);
+  background: var(--lcars-button);
+  font-family: var(--lcars-font-label);
+  font-size: 1.125rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.lcars-button:hover,
+.lcars-button:focus-visible {
+  text-decoration: none;
+  color: var(--lcars-on-color);
+  background: var(--lcars-button-hover);
+}
+
+/* Screenshots: the two desktop views side by side, below them the two phone
+   views with a note beside them. */
+
+.lcars-shots {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2rem 1.5rem;
+}
+
+.lcars-shot {
+  margin: 0;
+}
+
+.lcars-shot--wide {
+  grid-column: span 2;
+}
+
+.lcars-shot a {
+  display: block;
+}
+
+.lcars-shot img {
+  display: block;
+  box-sizing: border-box;
+  inline-size: 100%;
+  block-size: auto;
+  border: 1px solid var(--lcars-box-border-color);
+  border-radius: var(--lcars-box-radius);
+}
+
+.lcars-shot a:hover img {
+  border-color: var(--lcars-frame);
+}
+
+.lcars-shot figcaption {
+  margin-block-start: 0.625rem;
+  font-size: 0.875rem;
+}
+
+.lcars-shots__note {
+  grid-column: span 2;
+  align-self: center;
+}
+
+/* Features as panels: a ceiling with the label cut in on the right, an edge
+   on the left and a floor, joined by elbows (design guide of the theme,
+   section 4: outer curve 1.16 times the ceiling, inner curve 0.8 times). */
+
+.lcars-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+  gap: 0 1.5rem;
+}
+
+.lcars-panel {
+  --lcars-panel-color: var(--lcars-sidebar);
+  --lcars-panel-ceiling: 1.5625rem;
+  --lcars-panel-corner: round(calc(var(--lcars-panel-ceiling) * var(--lcars-elbow-corner-ratio)), 1px);
+  --lcars-panel-end: var(--lcars-panel-ceiling);
+  --lcars-panel-inner: round(calc(var(--lcars-panel-ceiling) * var(--lcars-elbow-inner-ratio)), 1px);
+  --lcars-panel-edge: 0.3125rem;
+  --lcars-panel-floor: var(--lcars-panel-edge);
+  --lcars-panel-floor-inner: calc(var(--lcars-panel-corner) - var(--lcars-panel-edge));
+
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: minmax(0, 1fr);
+  margin-block-end: 1.5rem;
+  padding-block-end: var(--lcars-panel-floor);
+  padding-inline-start: var(--lcars-panel-edge);
+  background: var(--lcars-panel-color);
+  border-start-start-radius: var(--lcars-panel-corner);
+  border-end-start-radius: var(--lcars-panel-corner);
+}
+
+/* The seam in the floor, as far from the end as the end of the ceiling. */
+.lcars-panel::after {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-end: var(--lcars-panel-end);
+  inline-size: var(--lcars-seam);
+  block-size: var(--lcars-panel-floor);
+  content: "";
+  background: var(--lcars-space);
+}
+
+.lcars-panel__ceiling {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-end;
+  min-block-size: var(--lcars-panel-ceiling);
+  padding-inline: calc(var(--lcars-panel-corner) + var(--lcars-panel-end)) var(--lcars-panel-end);
+}
+
+.lcars-panel__label {
+  --lcars-cut-height: var(--lcars-panel-ceiling);
+
+  overflow: hidden;
+  min-inline-size: 0;
+  margin: 0;
+  padding-inline: 0.3em;
+  white-space: nowrap;
+  text-transform: uppercase;
+  text-overflow: ellipsis;
+  color: var(--lcars-panel-color);
+  font-family: var(--lcars-font-label);
+  font-weight: bold;
+}
+
+.lcars-panel__inner {
+  padding-block: 1.25rem 1rem;
+  padding-inline: var(--lcars-gutter) 1rem;
+  border-start-start-radius: var(--lcars-panel-inner);
+  border-end-start-radius: var(--lcars-panel-floor-inner);
+  background: var(--lcars-space);
+}
+
+.lcars-panel__inner > :last-child {
+  margin-block-end: 0;
+}
+
+/* Code */
+
+.lcars-code {
+  overflow-x: auto;
+  max-inline-size: 44rem;
+  margin-block: 0 1rem;
+  padding: 1rem 1.25rem;
+  color: var(--lcars-text);
+  border: 1px solid var(--lcars-box-border-color);
+  border-radius: var(--lcars-box-radius);
+  background: var(--lcars-card-bg);
+  font-family: var(--lcars-font-code);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.lcars-code code {
+  font-size: inherit;
+}
+
+/* Bottom-left elbow with the footer in its curve. */
+
+.lcars-foot {
+  display: grid;
+  grid-area: foot;
+  grid-template-rows: minmax(var(--lcars-curve), auto) var(--lcars-bar-bottom);
+  grid-template-columns: var(--lcars-sidebar-width) minmax(0, 1fr);
+  background: var(--lcars-sidebar);
+  border-end-start-radius: var(--lcars-elbow-outer);
+}
+
+.lcars-foot__inner {
+  display: flex;
+  flex-wrap: wrap;
+  grid-area: 1 / 2;
+  align-items: end;
+  justify-content: space-between;
+  gap: 0.75rem 2rem;
+  padding-block: 0.75rem;
+  padding-inline: var(--lcars-gutter) 1rem;
+  border-end-start-radius: var(--lcars-elbow-inner);
+  background: var(--lcars-space);
+  font-size: 0.8125rem;
+}
+
+.lcars-foot__inner p {
+  max-inline-size: 44rem;
+  margin: 0;
+}
+
+.lcars-foot-menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.25rem 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lcars-foot-menu a {
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-family: var(--lcars-font-label);
+  font-size: 0.8125rem;
+}
+
+/* Up to 1080px (phones, tablets, a full HD screen in portrait), as the
+   theme: only an edge of the frame remains on the left, the menus stand
+   above the content as a grid of buttons, the screenshots of the phone
+   views go side by side and their note below. */
+
+@media (max-width: 67.5rem) {
+  .lcars-frame {
+    --lcars-sidebar-width: 1rem;
+    --lcars-bar-bottom: var(--lcars-sidebar-width);
+    --lcars-panel-bar: var(--lcars-sidebar-width);
+
+    grid-template-areas:
+      "panel panel"
+      "head head"
+      "edge side"
+      "edge main"
+      "foot foot";
+    grid-template-rows: auto auto auto 1fr auto;
+  }
+
+  .lcars-frame::before {
+    grid-area: edge;
+    content: "";
+    background: var(--lcars-sidebar);
+  }
+
+  .lcars-sidebar {
+    display: grid;
+    gap: var(--lcars-seam);
+    margin-block-end: 1.5rem;
+    padding-block: 0;
+    padding-inline: var(--lcars-gutter) 0;
+    background: none;
+  }
+
+  .lcars-sidebar h2 {
+    position: absolute !important;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+    inline-size: 1px;
+    block-size: 1px;
+  }
+
+  .lcars-menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
+    gap: var(--lcars-seam);
+  }
+
+  .lcars-menu li {
+    display: flex;
+  }
+
+  .lcars-menu a {
+    display: flex;
+    flex-grow: 1;
+    align-items: flex-end;
+    justify-content: flex-end;
+    border-block-end: 0;
+  }
+
+  .lcars-shots {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lcars-shot--wide,
+  .lcars-shots__note {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 39.9375rem) {
+  .lcars-frame {
+    padding: 0.5rem;
+  }
+
+  .lcars-upper__inner {
+    padding-block: 1rem;
+  }
+
+  .lcars-status {
+    margin-inline-start: 0;
+  }
+
+  .lcars-shots {
+    gap: 1.5rem 0.75rem;
+  }
+}
