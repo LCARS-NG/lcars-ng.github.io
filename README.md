@@ -9,8 +9,9 @@ the rules of the frame come from the theme (`css/lcars/tokens.css`,
 
 - `index.html`, `css/style.css`: the page
 - `images/screenshots/`: the screenshots of the theme README
-- `images/logo.svg`, `favicon.ico`: the one-colored logo and the favicon of
-  the theme
+- `images/logo-v.svg`, `favicon.ico`: the mark of LCARS-NG, a V in deep
+  blue, and the favicon, the V on a white card; `images/logo-v-color.svg`,
+  the colored V, for the contrast themes of the system
 - `fonts/`: Antonio and Inter (the Latin part), taken from the theme, each
   under the SIL Open Font License 1.1 (`OFL.txt` next to it)
 - `.nojekyll`: serve the files as they are

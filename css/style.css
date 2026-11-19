@@ -75,8 +75,9 @@
   --lcars-box-radius: 0.625rem;
   --lcars-elbow-corner-ratio: 1.16;
   --lcars-elbow-inner-ratio: 0.8;
-  --lcars-logo-size: 7rem;
-  --lcars-brand-gap: 1.25rem;
+  --lcars-brand-card: #ffffff;
+  --lcars-brand-ink: #08427f;
+  --lcars-brand-scale: 1.5;
 }
 
 @media (max-width: 39.9375rem) {
@@ -87,8 +88,7 @@
     --lcars-bar-top: 1.5rem;
     --lcars-title-height: 1.125rem;
     --lcars-box-radius: 0.375rem;
-    --lcars-logo-size: 4.5rem;
-    --lcars-brand-gap: 0.875rem;
+    --lcars-brand-scale: 1;
   }
 }
 
@@ -225,61 +225,79 @@ code {
   background: var(--lcars-space);
 }
 
-/* Logo, name and slogan. The logo is the one-colored form of the theme logo
-   on a disc in the steel blue of the frame; its triangle sits at the center
-   of the disc (77 x 72: apex 38.5|1.81, base 1.67|70.12 and 75.33|70.12;
-   radius of the circle round it 44.08). */
+/* Logo, name and slogan on a white card, as in the upper panel of the theme
+   (since 19.11.2026): the V of the theme logo without a disc in a deep blue,
+   the name and the slogan in that blue, 10:1. The V leads, 2.6 times the
+   capitals of the name; the card keeps --lcars-brand-pad to its tips, the
+   capitals of the name start at the tips of its wings and the last line of
+   the slogan stands on its apex (text-box), the slogan wraps into balanced
+   lines. All sizes are those of the theme times --lcars-brand-scale (1.5,
+   on phones 1). The units are the 72 of the image of the V (77 x 72; tips
+   at x 3.041 and 73.959, y 4.422, apex at y 67.964). */
+
+.lcars-upper__inner {
+  --lcars-brand-mark: calc(4.5rem * var(--lcars-brand-scale));
+  --lcars-brand-pad: calc(0.75rem * var(--lcars-brand-scale));
+  --lcars-brand-gap: calc(1rem * var(--lcars-brand-scale));
+  --lcars-brand-unit: calc(var(--lcars-brand-mark) / 63.542);
+}
 
 .lcars-brand {
   display: grid;
   grid-template-areas:
     "logo name"
     "logo slogan";
+  grid-template-rows: auto 1fr;
   grid-template-columns: auto minmax(0, 1fr);
-  align-content: center;
-  align-items: end;
+  align-items: start;
+  box-sizing: border-box;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  padding-block: calc(var(--lcars-brand-pad) - 4.422 * var(--lcars-brand-unit)) calc(var(--lcars-brand-pad) - 4.036 * var(--lcars-brand-unit));
+  padding-inline: calc(var(--lcars-brand-pad) - 3.041 * var(--lcars-brand-unit)) calc(var(--lcars-brand-pad) + 0.5rem * var(--lcars-brand-scale));
+  border-radius: var(--lcars-box-radius);
+  outline: 1px solid transparent; /* the edge in the contrast themes of the system */
+  outline-offset: -1px;
+  background: var(--lcars-brand-card);
   column-gap: var(--lcars-brand-gap);
 }
 
 .lcars-brand__logo {
-  --lcars-logo-gap: 0.3125rem;
-  --lcars-logo-unit: calc((var(--lcars-logo-size) / 2 - var(--lcars-logo-gap)) / 44.08);
-
-  display: grid;
   grid-area: logo;
-  place-items: center;
-  inline-size: var(--lcars-logo-size);
-  block-size: var(--lcars-logo-size);
-  border-radius: 50%;
-  background: var(--lcars-sidebar);
 }
 
 .lcars-brand__logo img {
   display: block;
-  translate: 0 calc(9.89 * var(--lcars-logo-unit));
   inline-size: auto;
-  block-size: calc(72 * var(--lcars-logo-unit));
+  block-size: calc(72 * var(--lcars-brand-unit));
 }
 
 .lcars-brand__name {
   grid-area: name;
   margin: 0;
+  margin-block-start: calc(4.422 * var(--lcars-brand-unit));
   text-transform: uppercase;
-  color: var(--lcars-sidebar);
+  color: var(--lcars-brand-ink);
   font-family: var(--lcars-font-label);
-  font-size: clamp(2.5rem, 1.5rem + 3vw, 4.5rem);
+  font-size: calc(2rem * var(--lcars-brand-scale));
   font-weight: bold;
   line-height: 1;
+  text-box: trim-start cap alphabetic;
 }
 
 .lcars-brand__slogan {
   grid-area: slogan;
-  align-self: start;
+  align-self: end;
+  max-inline-size: calc(16rem * var(--lcars-brand-scale));
   margin: 0;
-  padding-block-start: 0.375rem;
+  margin-block-end: calc(4.036 * var(--lcars-brand-unit));
+  padding-block-start: 0.25rem;
   text-transform: uppercase;
-  color: var(--lcars-sidebar);
-  font-size: 0.8125rem;
+  text-wrap: balance;
+  color: var(--lcars-brand-ink);
+  font-size: calc(0.75rem * var(--lcars-brand-scale));
+  line-height: 1.5;
+  text-box: trim-end cap alphabetic;
 }
 
 /* Status line under the name, where name and slogan start. */
@@ -289,7 +307,7 @@ code {
   flex-wrap: wrap;
   gap: 0.25rem 1.25rem;
   margin-block: 1.25rem 0;
-  margin-inline-start: calc(var(--lcars-logo-size) + var(--lcars-brand-gap));
+  margin-inline-start: calc(var(--lcars-brand-pad) + (77 - 3.041) * var(--lcars-brand-unit) + var(--lcars-brand-gap));
   padding: 0;
   list-style: none;
   text-transform: uppercase;
@@ -336,6 +354,12 @@ code {
 }
 
 @media (forced-colors: active) {
+  /* The card takes the background of the system: the colored V instead of
+     the deep blue one, which would vanish on a dark system background. */
+  .lcars-brand__logo img {
+    content: url("../images/logo-v-color.svg");
+  }
+
   .lcars-online {
     background: CanvasText;
     box-shadow: none;
